@@ -1,0 +1,4 @@
+messagebox==0.1.0
+mysql_connector_repackaged==0.3.1
+
+# This program may also need the SQLTools, SQL Server (mssql), and Sql Database Projects extensions in vsCode to work.
