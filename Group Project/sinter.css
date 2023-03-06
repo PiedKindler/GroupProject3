@@ -1,0 +1,61 @@
+body {
+    background-color: lightslategray;
+}
+
+
+header {
+    font-family: 'Franklin Gothic Medium';
+    text-align: center;
+    font-weight: bold;
+    font-style: italic;
+    font-size: x-large;
+    color: lightskyblue;
+}
+
+
+a {
+    color: lightskyblue;
+    text-decoration: none;
+    text-align: center;
+}
+
+a:hover { color: gold; }
+
+
+
+nav { font-weight: bold;
+    padding-top: .5em;
+    padding-right: .5em;
+    padding-bottom: .5em;
+    text-decoration: none;
+    text-align: center;
+    color: lightskyblue;
+}
+
+nav ul { display: flex;
+    flex-direction: row;
+    list-style-type: none; 
+    margin: 0;
+    padding: 0;
+    text-decoration: none; 
+    color: lightskyblue;
+}
+
+nav li {
+    padding-top: .5em;
+    padding-bottom: .5em;
+    padding-right: .5em;
+    padding-left: .5em;
+    width: 100%;
+    border: solid;
+}
+
+nav a {
+    text-decoration: none;
+}
+    
+nav a:link { color: lightskyblue; }
+    
+nav a:visited { color: white; }
+    
+nav a:hover { color: gold; }
