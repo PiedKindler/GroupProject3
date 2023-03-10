@@ -10,7 +10,7 @@
 from tkinter import *
 from datetime import datetime
 from typing import List, Tuple
-import messagebox
+import tkinter.messagebox as messagebox 
 
 # Creating the product class
 class Product:
@@ -428,9 +428,9 @@ class InventoryManagementGUI:
 
 import mysql.connector as mysql 
 
-# Check for inventory database exists
+# Connect to the database
 
-db = mysql.connector.connect(
+db = mysql.connect(
   host="localhost",
   user="root",
   password="root"
@@ -440,15 +440,18 @@ mycursor = db.cursor()
 
 mycursor.execute("SHOW DATABASES")
 
+y = False
 for x in mycursor:
     if x == 'inventory':
         if y == True:
             x = 'inventory'
         break
-    else mycursor.execute("CREATE DATABASE inventory"):
+    else:
+        mycursor.execute("CREATE DATABASE inventory")
         y = True
         
-# Connect to the database
+
+
 
 db = mysql.connect(
     host="localhost",
@@ -483,8 +486,8 @@ CREATE TABLE IF NOT EXISTS inventory_items (
     supplier_name VARCHAR(255) NOT NULL,
     supplier_contact VARCHAR(255) NOT NULL
 );
-"""
-cursor.execute(create_table_query)
+""" 
+cursor.execute(create_table_query) 
 
 # Insert a new item into the inventory
 insert_item_query = """

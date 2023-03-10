@@ -9,8 +9,7 @@
 # Importing the necessary modules
 from tkinter import *
 from datetime import datetime
-from typing import List, Tuple
-import messagebox 
+from typing import List, Tuple 
 
 # Creating the product class
 class Product:
@@ -168,8 +167,6 @@ class InventoryManagementGUI:
             self.current_user = username
             self.login_frame.destroy()
             self.main_menu()
-        else:
-            messagebox.showerror("Error", "Invalid username or password")
 
 # Creating the main menu function
     def main_menu(self):
@@ -249,10 +246,7 @@ class InventoryManagementGUI:
         price = self.price_entry.get()
         quantity = self.quantity_entry.get()
         if self.inventory_management.add_product(id, name, description, price, quantity):
-            messagebox.showinfo("Success", "Product added to inventory")
             self.add_product_frame.destroy()
-        else:
-            messagebox.showerror("Error", "Product not added to inventory")
 
 # Creating the remove product function
     def remove_product(self):
@@ -275,10 +269,8 @@ class InventoryManagementGUI:
     def remove_product_from_inventory(self):
         id = self.id_entry.get()
         if self.inventory_management.remove_product(id):
-            messagebox.showinfo("Success", "Product removed from inventory")
             self.remove_product_frame.destroy()
-        else:
-            messagebox.showerror("Error", "Product not removed from inventory")
+        
 
 # Creating the update product function
     def update_product(self):
@@ -329,10 +321,8 @@ class InventoryManagementGUI:
         price = self.price_entry.get()
         quantity = self.quantity_entry.get()
         if self.inventory_management.update_product(id, name, description, price, quantity):
-            messagebox.showinfo("Success", "Product updated in inventory")
             self.update_product_frame.destroy()
-        else:
-            messagebox.showerror("Error", "Product not updated in inventory")
+      
 
 # Creating the get low stock products function
     def get_low_stock_products(self):
@@ -356,11 +346,9 @@ class InventoryManagementGUI:
         threshold = self.threshold_entry.get()
         products = self.inventory_management.get_low_stock_products(threshold)
         if len(products) > 0:
-            messagebox.showinfo("Success", "Low stock products retrieved")
             self.get_low_stock_products_frame.destroy()
             self.display_products(products)
-        else:
-            messagebox.showerror("Error", "No low stock products retrieved")
+      
 
 # Creating the generate purchase function
     def generate_purchase(self):
@@ -390,10 +378,7 @@ class InventoryManagementGUI:
         id = self.id_entry.get()
         quantity = self.quantity_entry.get()
         if self.inventory_management.generate_purchase(id, quantity):
-            messagebox.showinfo("Success", "Purchase generated")
             self.generate_purchase_frame.destroy()
-        else:
-            messagebox.showerror("Error", "Purchase not generated")
 
 # Creating the display products function 
     def display_products(self, products):
@@ -426,10 +411,10 @@ class InventoryManagementGUI:
 # NOTE: I have not included the database file in this repository nor have I connected the database to a localhoast through mysql
 
 
-import mysql.connector as mysql 
+import mysql.connector
 
 # Connect to the database
-db = mysql.connect(
+db = mysql.connector.connect(
     host="localhost",
     user="root",
     password="root",
@@ -445,6 +430,8 @@ else:
 
 # Create a cursor object
 cursor = db.cursor()
+
+cursor.execute("CREATE DATABASE inventory")
 
 # Execute a query to create a table for the inventory items
 create_table_query = """
@@ -471,12 +458,19 @@ cursor.execute(insert_item_query, item_data)
 # Commit the changes to the database
 db.commit()
 
+# Execute a query to retrieve all the inventory items
+query = "SELECT * FROM inventory_items"
+cursor.execute(query)
+results = cursor.fetchall()
+for result in results:
+    print(result)
+
 # Close the cursor and database connection
 cursor.close()
 db.close()
 
 
-# creating the supplier class that retrives the supplier information from the database
+# creating the supplier class that retrieves the supplier information from the database
 class Supplier:
     def __init__(self, id=None, name=None, contact=None):
         self.id = id
@@ -506,22 +500,25 @@ class Supplier:
         # Connect to the database
         db = mysql.connector.connect(
             host="localhost",
-            user="username",
-            password="password",
-            database="inventory"
+            user="root",
+            password="root",
+            database="inventory",
+            auth_plugin='mysql_native_password'
         )
 
         # Create a cursor object
         cursor = db.cursor()
 
         # Execute a query to retrieve all suppliers
-        query = "SELECT id, name, contact FROM suppliers"
+        query = "SELECT id, name, contact FROM suppliers_table"
         cursor.execute(query)
 
-        # Create a list of Supplier objects from the query results
+        # Create a list of Supplier objects from the query
         suppliers = []
-        for (id, name, contact) in cursor:
-            suppliers.append(Supplier(id, name, contact))
+        results = cursor.fetchall()
+        for result in results:
+            supplier = Supplier(result[0], result[1], result[2])
+            suppliers.append(supplier)
 
         # Close the cursor and database connection
         cursor.close()
@@ -529,33 +526,7 @@ class Supplier:
 
         return suppliers
 
-    def save(self):
-        # Connect to the database
-        db = mysql.connector.connect(
-            host="localhost",
-            user="username",
-            password="password",
-            database="inventory"
-        )
+    def __str__(self):
+        return "ID: " + self.id + ", Name: " + self.name + ", Contact: " + self.contact
 
-        # Create a cursor object
-        cursor = db.cursor()
-
-        # Execute a query to insert or update the supplier information
-        if self.id is None:
-            query = "INSERT INTO suppliers (name, contact) VALUES (%s, %s)"
-            data = (self.name, self.contact)
-            cursor.execute(query, data)
-            self.id = cursor.lastrowid
-        else:
-            query = "UPDATE suppliers SET name=%s, contact=%s WHERE id=%s"
-            data = (self.name, self.contact, self.id)
-            cursor.execute(query, data)
-
-        # Commit the changes to the database
-        db.commit()
-
-        # Close the cursor and database connection
-        cursor.close()
-        db.close()
-
+    
