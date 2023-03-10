@@ -428,7 +428,7 @@ class InventoryManagementGUI:
 
 import mysql.connector as mysql 
 
-# Connect to the database
+# Check for inventory database exists
 
 db = mysql.connector.connect(
   host="localhost",
@@ -448,8 +448,7 @@ for x in mycursor:
     else mycursor.execute("CREATE DATABASE inventory"):
         y = True
         
-
-
+# Connect to the database
 
 db = mysql.connect(
     host="localhost",
