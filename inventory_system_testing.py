@@ -10,7 +10,8 @@
 from tkinter import *
 from datetime import datetime
 from typing import List, Tuple
-import tkinter.messagebox as messagebox 
+import tkinter.messagebox as messagebox
+import eel
 
 # Creating the product class
 class Product:
@@ -111,11 +112,11 @@ class Reporting:
         self.inventory = inventory_items
         self.purchases = purchases
         self.sales = sales
-
+    @eel.expose
     def items():
         # Gives list of inventory items
         return inventory_items
-    
+    @eel.expose
     def itemDescription():
         return item_description
     
