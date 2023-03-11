@@ -10,8 +10,7 @@
 from tkinter import *
 from datetime import datetime
 from typing import List, Tuple
-import tkinter.messagebox as messagebox
-import eel
+import tkinter.messagebox as messagebox 
 
 # Creating the product class
 class Product:
@@ -112,16 +111,16 @@ class Reporting:
         self.inventory = inventory_items
         self.purchases = purchases
         self.sales = sales
-    @eel.expose
+
     def items():
         # Gives list of inventory items
         return inventory_items
-    @eel.expose
+    
     def itemDescription():
         return item_description
     
-    #def sales():
-    #    return sales_info
+    def sales():
+        return item_sales
 
 # Creating the inventory management GUI class
 class InventoryManagementGUI:
@@ -467,10 +466,10 @@ cursor.execute(create_table_query)
 # Insert a new item into the inventory
 insert_item_query = """
 INSERT INTO inventory_items (name, description, quantity, price, supplier_name, supplier_contact, sales)
-VALUES (%s, %s, %s, %s, %s, %s);
+VALUES (%s, %s, %s, %s, %s, %s, %s);
 """
-#item_data = ("Example Item", "This is an example item", 10, 10.99, "Example Supplier", "example@supplier.com", "Example Sale")
-#cursor.execute(insert_item_query, item_data)
+item_data = ("Example Item", "This is an example item", 10, 10.99, "Example Supplier", "example@supplier.com", "Example Sale")
+cursor.execute(insert_item_query, item_data)
 
 # Commit the changes to the database
 db.commit()
@@ -506,6 +505,14 @@ cursor.execute(query)
 item_description = []
 for item in cursor:
     item_description.append(item)
+
+query = "SELECT sales FROM inventory_items"
+cursor.execute(query)
+
+# Create a list of suppliers from the query results
+item_sales = []
+for item in cursor:
+    item_sales.append(item)
 
 # Close the cursor and database connection
 cursor.close()
