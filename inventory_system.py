@@ -15,7 +15,6 @@ import eel
 
 # Creating the product class
 class Product:
-    @eel.expose
     def __init__(self, id: str, name: str, description: str, price: float, quantity: int):
         self.id = id
         self.name = name
@@ -25,21 +24,17 @@ class Product:
 
 # Creating the inventory class
 class Inventory:
-    @eel.expose
     def __init__(self):
         self.products = []
 
-    @eel.expose
     def add_product(self, product: Product):
         # Add product to inventory
         self.products.append(product)
 
-    @eel.expose
     def remove_product(self, product: Product):
         # Remove product from inventory
         self.products.remove(product)
 
-    @eel.expose
     def update_product(self, product: Product):
         # Update product information in inventory
         for i in range(len(self.products)):
@@ -48,11 +43,9 @@ class Inventory:
 
 # Creating the purchase class
 class Purchase:
-    @eel.expose
     def __init__(self):
         self.purchases = []
 
-    @eel.expose
     def add_purchase(self, product: Product, quantity: int):
         # Add purchase to inventory
         purchase = (product, quantity, datetime.now())
@@ -61,26 +54,22 @@ class Purchase:
 
 # Creating the sales class
 class Sales:
-    @eel.expose
     def __init__(self):
         self.sales = []
 
-    @eel.expose
-    def add_sale(self, product: Product, quantity: int):
+    def add_sale(product, quantity):
         # Remove sale from inventory
-        if product.quantity < quantity:
-            raise ValueError("Not enough stock available")
+        if quantity > len(inventory_items):
+            print("ERROR: NOT ENOUGH AVAILABLE")
         sale = (product, quantity, datetime.now())
-        self.sales.append(sale)
-        product.quantity -= quantity
+        sales_numbers.append(sale)
+        print("SALE ADDED")
 
 # Creating the barcode scanner class
 class BarcodeScanner:
-    @eel.expose
     def __init__(self, inventory: Inventory):
         self.inventory = inventory
 
-    @eel.expose
     def scan(self, barcode: str) -> Product:
         # Find product in inventory by barcode
         for product in self.inventory.products:
@@ -91,17 +80,14 @@ class BarcodeScanner:
 
 # Creating the user class and user management class
 class User:
-    @eel.expose
     def __init__(self, username: str, password: str):
         self.username = username
         self.password = password
 
 class UserManagement:
-    @eel.expose
     def __init__(self):
         self.users = []
 
-    @eel.expose
     def login(self, username: str, password: str) -> bool:
         # Authenticate user
         for user in self.users:
@@ -109,12 +95,10 @@ class UserManagement:
                 return True
         return False
 
-    @eel.expose
     def add_user(self, user: User):
         # Add user to system
         self.users.append(user)
 
-    @eel.expose
     def remove_user(self, username: str):
         # Remove user from system
         for i in range(len(self.users)):
@@ -123,17 +107,16 @@ class UserManagement:
                 break
 
 # Creating the reporting class
-class Reporting:
-    @eel.expose
+class Reporting: 
     def __init__(self, inventory, purchases: Purchase, sales: Sales):
         self.inventory = inventory_items
         self.purchases = purchases
         self.sales = sales
-    @eel.expose
     def items():
         # Gives list of inventory items
         return inventory_items
-    @eel.expose
+
+    
     def itemDescription():
         return item_description
     
@@ -142,7 +125,6 @@ class Reporting:
 
 # Creating the inventory management GUI class
 class InventoryManagementGUI:
-    @eel.expose
     def __init__(self, inventory: Inventory, purchase: Purchase, sales: Sales, barcode_scanner: BarcodeScanner, user_management: UserManagement, reporting: Reporting):
         self.inventory = inventory
         self.purchase = purchase
@@ -182,7 +164,6 @@ class InventoryManagementGUI:
         self.window.mainloop()
 
  # Creating the login function
-    @eel.expose
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
@@ -194,7 +175,6 @@ class InventoryManagementGUI:
             messagebox.showerror("Error", "Invalid username or password")
 
 # Creating the main menu function
-    @eel.expose
     def main_menu(self):
         self.main_menu_frame = Frame(self.window)
         self.main_menu_frame.pack()
@@ -224,7 +204,6 @@ class InventoryManagementGUI:
         self.logout_button.grid(row=4, column=0, columnspan=2, pady=10)
 
 # Creating the add product function
-    @eel.expose
     def add_product(self):
         self.add_product_frame = Frame(self.window)
         self.add_product_frame.pack()
@@ -266,7 +245,6 @@ class InventoryManagementGUI:
         self.add_product_button.grid(row=6, column=0, columnspan=2, pady=10)
 
 # Creating the add product to inventory function
-    @eel.expose
     def add_product_to_inventory(self):
         id = self.id_entry.get()
         name = self.name_entry.get()
@@ -280,7 +258,6 @@ class InventoryManagementGUI:
             messagebox.showerror("Error", "Product not added to inventory")
 
 # Creating the remove product function
-    @eel.expose
     def remove_product(self):
         self.remove_product_frame = Frame(self.window)
         self.remove_product_frame.pack()
@@ -298,7 +275,6 @@ class InventoryManagementGUI:
         self.remove_product_button.grid(row=2, column=0, columnspan=2, pady=10)
 
 # Creating the remove product from inventory function
-    @eel.expose
     def remove_product_from_inventory(self):
         id = self.id_entry.get()
         if self.inventory_management.remove_product(id):
@@ -308,7 +284,6 @@ class InventoryManagementGUI:
             messagebox.showerror("Error", "Product not removed from inventory")
 
 # Creating the update product function
-    @eel.expose
     def update_product(self):
         self.update_product_frame = Frame(self.window)
         self.update_product_frame.pack()
@@ -350,7 +325,6 @@ class InventoryManagementGUI:
         self.update_product_button.grid(row=6, column=0, columnspan=2, pady=10)
 
 # Creating the update product in inventory function
-    @eel.expose
     def update_product_in_inventory(self):
         id = self.id_entry.get()
         name = self.name_entry.get()
@@ -364,7 +338,6 @@ class InventoryManagementGUI:
             messagebox.showerror("Error", "Product not updated in inventory")
 
 # Creating the get low stock products function
-    @eel.expose
     def get_low_stock_products(self):
         self.get_low_stock_products_frame = Frame(self.window)
         self.get_low_stock_products_frame.pack()
@@ -382,7 +355,6 @@ class InventoryManagementGUI:
         self.get_low_stock_products_button.grid(row=2, column=0, columnspan=2, pady=10)
 
 # Creating the get low stock products from inventory function
-    @eel.expose
     def get_low_stock_products_from_inventory(self):
         threshold = self.threshold_entry.get()
         products = self.inventory_management.get_low_stock_products(threshold)
@@ -394,7 +366,6 @@ class InventoryManagementGUI:
             messagebox.showerror("Error", "No low stock products retrieved")
 
 # Creating the generate purchase function
-    @eel.expose
     def generate_purchase(self):
         self.generate_purchase_frame = Frame(self.window)
         self.generate_purchase_frame.pack()
@@ -418,7 +389,6 @@ class InventoryManagementGUI:
         self.generate_purchase_button.grid(row=3, column=0, columnspan=2, pady=10)
 
 # Creating the generate purchase from inventory function
-    @eel.expose
     def generate_purchase_from_inventory(self):
         id = self.id_entry.get()
         quantity = self.quantity_entry.get()
@@ -428,8 +398,9 @@ class InventoryManagementGUI:
         else:
             messagebox.showerror("Error", "Purchase not generated")
 
-# Creating the display products function
-    @eel.expose
+# Creating the display products function 
+    
+
     def display_products(self, products):
         self.display_products_frame = Frame(self.window)
         self.display_products_frame.pack()
@@ -445,20 +416,19 @@ class InventoryManagementGUI:
 
         self.close_button = Button(self.display_products_frame, text="Close", command=self.close_window)
         self.close_button.grid(row=2, column=0, columnspan=2, pady=10)
-
+    
 # Creating the close window function
-    @eel.expose
     def close_window(self):
         self.display_products_frame.destroy()
 
 
 # Creating the inventory management class 
-    @eel.expose
     def __str__(self):
         return "ID: " + self.id + ", Name: " + self.name + ", Description: " + self.description + ", Price: " + self.price + ", Quantity: " + self.quantity
 
 
 # Creating the code needed to connect to the database 
+# NOTE: I have not included the database file in this repository nor have I connected the database to a localhoast through mysql
 
 
 import mysql.connector as mysql 
@@ -466,8 +436,8 @@ import mysql.connector as mysql
 # Connect to the database
 db = mysql.connect(
     host="localhost",
-    user=input("Enter Username: "),
-    password=input("Enter Password: "),
+    user="root",
+    password="root",
     database="inventory",
     auth_plugin='mysql_native_password'
 )
@@ -499,10 +469,10 @@ cursor.execute(create_table_query)
 # Insert a new item into the inventory
 insert_item_query = """
 INSERT INTO inventory_items (name, description, quantity, price, supplier_name, supplier_contact, sales)
-VALUES (%s, %s, %s, %s, %s, %s);
+VALUES (%s, %s, %s, %s, %s, %s, %s);
 """
-#item_data = ("Example Item", "This is an example item", 10, 10.99, "Example Supplier", "example@supplier.com", "Example Sale")
-#cursor.execute(insert_item_query, item_data)
+item_data = ("Example Item", "This is an example item", 10, 10.99, "Example Supplier", "example@supplier.com", "Example Sale")
+cursor.execute(insert_item_query, item_data)
 
 # Commit the changes to the database
 db.commit()
@@ -526,7 +496,7 @@ for item in cursor:
 query = "SELECT supplier_contact FROM inventory_items"
 cursor.execute(query)
 
-# Create a list of suppliers from the query results
+# Create a list of supplier contact information from the query results
 supplier_contacts = []
 for item in cursor:
     supplier_contacts.append(item)
@@ -534,10 +504,18 @@ for item in cursor:
 query = "SELECT description FROM inventory_items"
 cursor.execute(query)
 
-# Create a list of suppliers from the query results
+# Create a list of item descriptions from the query results
 item_description = []
 for item in cursor:
     item_description.append(item)
+
+query = "SELECT sales FROM inventory_items"
+cursor.execute(query)
+
+# Create a list of item descriptions from the query results
+sales_numbers = []
+for item in cursor:
+    sales_numbers.append(item)
 
 # Close the cursor and database connection
 cursor.close()
@@ -546,37 +524,29 @@ db.close()
 
 # creating the supplier class that retrives the supplier information from the database
 class Supplier:
-    @eel.expose
     def __init__(self, id=None, name=None, contact=None):
         self.id = id
         self.name = name
         self.contact = contact
 
-    @eel.expose
     def get_id(self):
         return self.id
 
-    @eel.expose
     def set_id(self, id):
         self.id = id
 
-    @eel.expose
     def get_name(self):
         return self.name
 
-    @eel.expose
     def set_name(self, name):
         self.name = name
 
-    @eel.expose
     def get_contact(self):
         return self.contact
 
-    @eel.expose
     def set_contact(self, contact):
         self.contact = contact
 
-    @eel.expose
     @staticmethod
     def get_all_suppliers():
         # Connect to the database
@@ -605,15 +575,12 @@ class Supplier:
 
         return suppliers
     
-    @eel.expose
     def names():
         return supplier_names
     
-    @eel.expose
     def contact_info():
         return supplier_contacts
 
-    @eel.expose
     def save(self):
         # Connect to the database
         db = mysql.connector.connect(
